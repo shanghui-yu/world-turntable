@@ -31,8 +31,8 @@
     <footer>
       <p class="tip">你有可能中华为手机哦~</p>
       <div class="me">
-        <span>剩余次数：5</span>
-        <span>余额：100积分</span>
+        <span>剩余次数：{{userinfo.num}}</span>
+        <span>余额：{{userinfo.integral}}积分</span>
       </div>
     </footer>
     <truntableToase
@@ -54,7 +54,11 @@ export default {
       smailView: false,
       toggletoaseStatus: false,
       level: 0,
-      begin: 0
+      begin: 0,
+      userinfo: {
+        num: 5, // 剩余次数
+        integral: 100 // 剩余次数
+      }
     }
   },
   components: {
@@ -62,7 +66,6 @@ export default {
     truntableToase
   },
   computed: {
-
   },
   created () {
     this.getWxconfig()
@@ -86,8 +89,7 @@ export default {
       setTimeout(() => {
         this.begin = 2
         this.toggletoase()
-      }, 3e3)
-      // this.toggletoase()
+      }, 4e3)
     }
   }
 }
