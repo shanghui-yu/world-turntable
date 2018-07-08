@@ -1,25 +1,19 @@
 <template>
   <div class="waaper">
     <img src="https://img5.168trucker.com/topic/images/worldCup/login.png" alt="" class="log">
-    <div class="win-user">
-      <ul>
-        <li>恭喜<span>xxx</span>获得<span>xxx</span></li>
-        <li>恭喜<span>xxx</span>获得<span>xxx</span></li>
-        <li>恭喜<span>xxx</span>获得<span>xxx</span></li>
-        <li>恭喜<span>xxx</span>获得<span>xxx</span></li>
-        <li>恭喜<span>xxx</span>获得<span>xxx</span></li>
-        <li>恭喜<span>xxx</span>获得<span>xxx</span></li>
-        <li>恭喜<span>xxx</span>获得<span>xxx</span></li>
-      </ul>
-      <ul>
-        <li>恭喜<span>xxx</span>获得<span>xxx</span></li>
-        <li>恭喜<span>xxx</span>获得<span>xxx</span></li>
-        <li>恭喜<span>xxx</span>获得<span>xxx</span></li>
-        <li>恭喜<span>xxx</span>获得<span>xxx</span></li>
-        <li>恭喜<span>xxx</span>获得<span>xxx</span></li>
-        <li>恭喜<span>xxx</span>获得<span>xxx</span></li>
-        <li>恭喜<span>xxx</span>获得<span>xxx</span></li>
-      </ul>
+    <div class="win-user" ref="loop">
+      <div class="wraper">
+        <ul  ref="loopMain">
+          <li>恭喜<span>xxx</span>获得<span>1</span></li>
+          <li>恭喜<span>xxx</span>获得<span>2</span></li>
+          <li>恭喜<span>xxx</span>获得<span>3</span></li>
+        </ul>
+        <ul>
+         <li>恭喜<span>xxx</span>获得<span>1</span></li>
+          <li>恭喜<span>xxx</span>获得<span>2</span></li>
+          <li>恭喜<span>xxx</span>获得<span>3</span></li>
+        </ul>
+      </div>
     </div>
     <h2 :class="['title',smailView?'smail-title':'']"></h2>
     <turntableLock
@@ -53,6 +47,7 @@ export default {
     return {
       smailView: false,
       toggletoaseStatus: false,
+      initLeft: '315px',
       level: 0,
       begin: 0,
       userinfo: {
@@ -79,6 +74,7 @@ export default {
     }
   },
   mounted () {
+    this.loop()
   },
   methods: {
     toggletoase () {
@@ -89,7 +85,20 @@ export default {
       setTimeout(() => {
         this.begin = 2
         this.toggletoase()
+        this.userinfo.num--
+        this.userinfo.integral--
       }, 4e3)
+    },
+    loop () {
+      let loops = this.$refs.loop
+      let loopMain = this.$refs.loopMain
+      this.times = setInterval(() => {
+        if (loops.scrollLeft >= loopMain.clientWidth) {
+          loops.scrollLeft = 0
+        } else {
+          loops.scrollLeft++
+        }
+      }, 10)
     }
   }
 }
@@ -125,16 +134,17 @@ export default {
     .win-user{
       position: absolute;
       top: 46px;
-      width: 100%;
       height: 46px;
-      overflow-x: scroll;
-      ul{
+      overflow: hidden;
+      width: 100%;
+      .wraper{
         width: 10000%;
-        &:first-child{
-          li:first-child{
-            margin-left: 315px;
-          }
-        }
+        overflow: hidden;
+      }
+      ul{
+        overflow: hidden;
+        float: left;
+        display: block;
       }
       li{
         border-style: solid;
