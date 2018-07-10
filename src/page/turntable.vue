@@ -3,15 +3,15 @@
     <img src="https://img5.168trucker.com/topic/images/worldCup/login.png" alt="" class="log">
     <div class="win-user" ref="loop">
       <div class="wraper">
-        <ul  ref="loopMain">
-          <li>恭喜<span>xxx</span>获得<span>1</span></li>
-          <li>恭喜<span>xxx</span>获得<span>2</span></li>
-          <li>恭喜<span>xxx</span>获得<span>3</span></li>
+        <ul ref="loopMain">
+          <li v-for="(item, index) in WinnerList" :key="index">
+            恭喜<span>{{item.name}}</span>获得<span>{{item.award}}</span>
+          </li>
         </ul>
         <ul>
-         <li>恭喜<span>xxx</span>获得<span>1</span></li>
-          <li>恭喜<span>xxx</span>获得<span>2</span></li>
-          <li>恭喜<span>xxx</span>获得<span>3</span></li>
+          <li v-for="(item, index) in WinnerList" :key="index">
+            恭喜<span>{{item.name}}</span>获得<span>{{item.award}}</span>
+          </li>
         </ul>
       </div>
     </div>
@@ -33,6 +33,9 @@
       v-show="toggletoaseStatus"
       :level='level'
       @toggletoase="toggletoase"></truntableToase>
+
+    <toast :msg="toastMsg" v-if="toastState"></toast>
+    <Code v-show="!userinfo.followed"></Code>
   </div>
 </template>
 
@@ -40,25 +43,41 @@
 import storage from '../store/storage.js'
 import turntableLock from '../components/turntable-lock'
 import truntableToase from '../components/truntable-toase'
+import Code from '../components/code'
 import XHR from '../api'
 import toast from '../components/toast'
 export default {
   data () {
     return {
+      toastMsg: '', // toast文案
+      toastState: false, // toast状态
       smailView: false,
       toggletoaseStatus: false,
-      initLeft: '315px',
-      level: 0,
-      begin: 0,
+      level: 1, // 中奖等级
+      begin: 0, // 转盘状态
       userinfo: {
         num: 5, // 剩余次数
-        integral: 100 // 剩余次数
-      }
+        integral: 100, // 剩余次数
+        followed: 1 // 用户是否已关注公众号，1:关注，0：未关注弹出二维码
+      },
+      uid: '', // 用户uid
+      WinnerList: [ // 中奖用户列表
+        {
+          name: '郭志君',
+          award: '200元油卡'
+        },
+        {
+          name: '郭志君',
+          award: '200元油卡'
+        }
+      ]
     }
   },
   components: {
     turntableLock,
-    truntableToase
+    toast,
+    truntableToase,
+    Code
   },
   computed: {
   },
@@ -77,10 +96,65 @@ export default {
     this.loop()
   },
   methods: {
+    showToast (msg) {
+      if (this.toastState) return
+      this.toastMsg = msg
+      this.toastState = true
+      setTimeout(() => {
+        this.toastState = false
+      }, 2e3)
+    },
     toggletoase () {
       this.toggletoaseStatus = !this.toggletoaseStatus
     },
+    // 获取用户积分和剩余次数信息
+    getUserInfo () {
+      let json = {
+        uid: this.uid
+      }
+      XHR.getUserInfo(json).then(res => {
+        let {status, data, errMsg} = res.data
+        if (!status) {
+          this.userinfo = data
+        } else {
+          this.showToast(errMsg)
+        }
+      })
+    },
+    // 获取中奖名单
+    getWinnerListFun () {
+      let json = {
+        date: '2018/07/16'
+      }
+      XHR.getWinnerList(json).then(res => {
+        let {status, data} = res.data
+        if (!status) {
+          this.WinnerList = data
+        }
+      })
+    },
+    getPrize () { // 开始转盘
+      let json = {
+        uid: this.uid
+      }
+      XHR.getWinnerList(json).then(res => {
+        let {status, data, errMsg} = res.data
+        if (!status) {
+          this.level = data.awarId
+        } else {
+          this.showToast(errMsg)
+        }
+      })
+    },
     luck () {
+      if (this.userinfo.num === 0) {
+        this.showToast('今天抽奖次数已用完请明天再来')
+        return
+      }
+      if (this.userinfo.integral === 0) {
+        this.showToast('积分不足')
+        return
+      }
       this.begin = 1
       setTimeout(() => {
         this.begin = 2
