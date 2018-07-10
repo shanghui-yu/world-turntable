@@ -3,7 +3,7 @@
   <div class="mask">
     <div :class="`main level${level}`">
       <h5 class="title">{{msg[level]}}~</h5>
-      <span class="img"></span>
+      <img src="https://img5.168trucker.com/topic/images/worldCup/turntable-all.png" alt="">
       <span class="ok" @click="toggletoase">{{level?'确定':'再来一次'}}</span>
     </div>
   </div>
@@ -77,7 +77,7 @@ export default {
       margin-top: 24px;
       line-height: 36px;
     }
-    .img{
+    img{
       width: 204px;
       height: 104px;
       display: block;

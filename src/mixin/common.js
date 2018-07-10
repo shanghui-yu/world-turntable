@@ -83,19 +83,6 @@ export default {
         } catch (e) {}
       })
     },
-    // 添加积分
-    addIntegral (uid, integral) {
-      let json = {
-        uid,
-        integral
-      }
-      XHR.addIntegral(json).then((res) => {
-        let {status} = res.data
-        if (!status) {
-          this.setCookie('worldShare', 'isok')
-        }
-      })
-    },
     hideshare () {
       wx.ready(function () {
         wx.hideAllNonBaseMenuItem()
@@ -105,8 +92,6 @@ export default {
       })
     },
     share () {
-      let user = localStorage.getItem('userInfoWorldCup')
-      user = JSON.parse(user)
       wx.ready(() => {
         wx.showAllNonBaseMenuItem()
         wx.hideMenuItems({
@@ -114,32 +99,22 @@ export default {
         })
         // 分享到朋友圈
         wx.onMenuShareTimeline({
-          title: '卡车世界杯竞猜赢大奖',
-          link: 'https://topic.vr0101.com/worldCup/index.html',
+          title: '',
+          link: location.href,
           imgUrl: 'https://img5.168trucker.com/topic/images/worldCup/share.png',
           success: (res) => {
-            let qaShare = this.getCookie('worldShare')
-            if (!qaShare) {
-              this.addIntegral(user.uid, 1)
-            }
-            ga('send', 'event', '用户分享', '朋友圈', user.nickname)
           },
-          cancel: (res) => {
+          cancel: () => {
             // 用户取消分享后执行的回调函数
           }
         })
         // 分享给朋友
         wx.onMenuShareAppMessage({
-          title: '卡车世界杯竞猜赢大奖',
-          desc: '卡车世界杯，全国卡友都参加，电视、手机、车载蓝牙、车模奖品多多，参与就有礼！',
-          link: 'https://topic.vr0101.com/worldCup/index.html',
+          title: '',
+          desc: '',
+          link: location.href,
           imgUrl: 'https://img5.168trucker.com/topic/images/worldCup/share.png',
-          success: (res) => {
-            let qaShare = this.getCookie('worldShare')
-            if (!qaShare) {
-              this.addIntegral(user.uid, 1)
-            }
-            ga('send', 'event', '用户分享', '发送给朋友', user.nickname)
+          success: () => {
           },
           cancel: function () {
             // 用户取消分享后执行的回调函数
