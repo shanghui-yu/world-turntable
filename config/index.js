@@ -13,10 +13,10 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/bx': {
-        target: 'https://topic.vr0101.com', // 你的目标域名
+        target: 'https://topic.168trucker.cn', // 你的目标域名
         changeOrigin: true,
         pathRewrite: {
-          '^/bx': 'https://topic.vr0101.com'
+          '^/bx': 'https://topic.168trucker.cn'
         }
       }
     },

@@ -2,8 +2,8 @@
 <transition name="fade">
   <div class="mask">
     <div :class="`main level${level}`">
-      <h5 class="title">{{msg[level]}}~</h5>
-      <img src="https://img5.168trucker.com/topic/images/worldCup/turntable-all.png" alt="">
+      <h5 class="title">{{luckInfo?luckInfo.name:''}}~</h5>
+      <img :src="luckInfo?luckInfo.imageurl:''" alt="">
       <span class="ok" @click="toggletoase">{{level?'确定':'再来一次'}}</span>
     </div>
   </div>
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  props: ['level'],
+  props: ['level', 'luckInfo'],
   data () {
     return {
       msg: [

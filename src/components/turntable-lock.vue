@@ -1,33 +1,9 @@
 <template>
 <div :class="['lucky-truntable',smailView?'smail-truntable':'']">
     <div :class="['lucky-plate', begin==1?`level${level}`:'', begin==2?`level${level}-restore no-trs`:'']">
-      <div class="lev lev1">
-        <img src="https://img5.168trucker.com/topic/images/worldCup/turntable-all.png" alt="">
-        <span>京东100元</span>
-      </div>
-      <div class="lev lev2">
-        <img src="https://img5.168trucker.com/topic/images/worldCup/turntable-all.png" alt="">
-        <span>京东100元</span>
-      </div>
-      <div class="lev lev3">
-        <img src="https://img5.168trucker.com/topic/images/worldCup/turntable-all.png" alt="">
-        <span>京东100元</span>
-      </div>
-      <div class="lev lev4">
-        <img src="https://img5.168trucker.com/topic/images/worldCup/turntable-all.png" alt="">
-        <span>京东100元</span>
-      </div>
-      <div class="lev lev5">
-        <img src="https://img5.168trucker.com/topic/images/worldCup/turntable-all.png" alt="">
-        <span>京东100元</span>
-      </div>
-      <div class="lev lev7">
-        <img src="https://img5.168trucker.com/topic/images/worldCup/turntable-all.png" alt="">
-        <span>京东100元</span>
-      </div>
-      <div class="lev lev8">
-        <img src="https://img5.168trucker.com/topic/images/worldCup/turntable-all.png" alt="">
-        <span>京东100元</span>
+      <div :class="`lev lev${index+1}`" v-for="(item,index) in dashboardInit" :key="index">
+        <img :src="item.imageurl" alt="">
+        <span>{{item.name}}</span>
       </div>
     </div>
     <span class="pointer" @click="luck">抽奖</span>
@@ -36,7 +12,7 @@
 
 <script>
 export default {
-  props: ['smailView', 'level', 'begin'],
+  props: ['smailView', 'level', 'begin', 'dashboardInit'],
   data () {
     return {
     }
@@ -64,7 +40,7 @@ export default {
     overflow: hidden;
     width: 100%;
     height: 100%;
-    background: url('https://img5.168trucker.com/topic/images/worldCup/lucky-plate.png') no-repeat;
+    background: url('../assets/lucky-plate.png') no-repeat;
     background-size: cover;
     transition: -webkit-transform 3s ease-in-out;
     transition: transform 3s ease-in-out;
@@ -129,7 +105,8 @@ export default {
         width: 143px;
         height: 75px;
         margin-top: 20px;
-        margin-bottom: 3px;
+        margin-bottom: 8px;
+        background: red;
       }
       span{
         font-size: 24px;
@@ -137,20 +114,44 @@ export default {
         font-weight: bold;
         line-height: 30px;
         text-align: center;
-        width: 115px;
+        width: 120px;
         display: block;
         margin:0 auto;
       }
     }
     .lev1{
-      left:435px;
-      top:250px;
+      left: 440px;
+      top: 254px;
       transform: rotate(90deg)
     }
     .lev2{
       left: 112px;
       top: 108px;
       transform: rotate(-45deg);
+    }
+    .lev3{
+      left: 245px;
+      top: 60px;
+    }
+    .lev4{
+      left: 382px;
+      top: 115px;
+      transform: rotate(45deg);
+    }
+    .lev5{
+      left: 104px;
+      top: 390px;
+      transform: rotate(-135deg);
+    }
+    .lev6{
+      left: 384px;
+      top: 394px;
+      transform: rotate(135deg);
+    }
+    .lev7{
+      left: 48px;
+      top: 252px;
+      transform: rotate(-90deg);
     }
   }
   .pointer{

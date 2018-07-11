@@ -24,6 +24,14 @@ class XHR {
       type: 'GET'
     })
   }
+  // 获取表盘信息
+  dashboardInit (json) {
+    return fetch({
+      url: `${URLS}/Roulette/dashboardInit`,
+      body: json,
+      type: 'GET'
+    })
+  }
   // 获取中奖名单
   getWinnerList (json) {
     return fetch({

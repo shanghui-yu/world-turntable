@@ -20,6 +20,7 @@
       :smailView="smailView"
       :level="level"
       :begin="begin"
+      :dashboardInit="dashboardInit"
       @luck="luck">
     </turntableLock>
     <footer>
@@ -32,6 +33,7 @@
     <truntableToase
       v-show="toggletoaseStatus"
       :level='level'
+      :luckInfo="luckInfo[0]"
       @toggletoase="toggletoase"></truntableToase>
 
     <toast :msg="toastMsg" v-if="toastState"></toast>
@@ -53,7 +55,7 @@ export default {
       toastState: false, // toast状态
       smailView: false,
       toggletoaseStatus: false,
-      level: 1, // 中奖等级
+      level: 4, // 中奖等级
       begin: 0, // 转盘状态
       userinfo: {
         num: 5, // 剩余次数
@@ -61,6 +63,50 @@ export default {
         followed: 1 // 用户是否已关注公众号，1:关注，0：未关注弹出二维码
       },
       uid: '', // 用户uid
+      dashboardInit: [
+        {
+          awarId: 1,
+          level: 1,
+          imageurl: 'https://img5.168trucker.com/images/roulette/1/1.png',
+          name: '华为手机'
+        },
+        {
+          awarId: 1,
+          level: 2,
+          imageurl: 'https://img5.168trucker.com/images/roulette/1/1.png',
+          name: '华为手机2'
+        },
+        {
+          awarId: 1,
+          level: 3,
+          imageurl: 'https://img5.168trucker.com/images/roulette/1/1.png',
+          name: '华为手机3'
+        },
+        {
+          awarId: 1,
+          level: 4,
+          imageurl: 'https://img5.168trucker.com/images/roulette/1/1.png',
+          name: '华为手机4'
+        },
+        {
+          awarId: 1,
+          level: 5,
+          imageurl: 'https://img5.168trucker.com/images/roulette/1/1.png',
+          name: '华为手机5'
+        },
+        {
+          awarId: 1,
+          level: 4,
+          imageurl: 'https://img5.168trucker.com/images/roulette/1/1.png',
+          name: '华为手机4'
+        },
+        {
+          awarId: 1,
+          level: 5,
+          imageurl: 'https://img5.168trucker.com/images/roulette/1/1.png',
+          name: '华为手机5'
+        }
+      ], // 表盘信息
       WinnerList: [ // 中奖用户列表
         {
           name: '郭志君',
@@ -70,7 +116,8 @@ export default {
           name: '郭志君',
           award: '200元油卡'
         }
-      ]
+      ],
+      luckInfo: [] // 中奖信息
     }
   },
   components: {
@@ -82,8 +129,8 @@ export default {
   computed: {
   },
   created () {
-    this.getWxconfig()
-    this.hideshare()
+    // this.getWxconfig()
+    // this.hideshare()
     if (window.innerHeight < 1182) {
       this.smailView = true
     }
@@ -133,6 +180,17 @@ export default {
         }
       })
     },
+    getDashboardInit () { // 获取表盘信息
+      let json = {
+        ts: +new Date()
+      }
+      XHR.dashboardInit(json).then(res => {
+        let {status, data} = res.data
+        if (!status) {
+          this.dashboardInit = data
+        }
+      })
+    },
     getPrize () { // 开始转盘
       let json = {
         uid: this.uid
@@ -155,6 +213,14 @@ export default {
         this.showToast('积分不足')
         return
       }
+      this.luckInfo = this.dashboardInit.filter((item) => {
+        if (item.level === this.level) {
+          return true
+        } else {
+          return false
+        }
+      })
+      console.log(this.luckInfo)
       this.begin = 1
       setTimeout(() => {
         this.begin = 2
