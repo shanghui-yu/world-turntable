@@ -12,6 +12,7 @@ export default {
   created () {
     this.alginAuth()
     this.getUserinfo()
+    console.log('ceshi')
   },
   methods: {
     alginAuth () {
